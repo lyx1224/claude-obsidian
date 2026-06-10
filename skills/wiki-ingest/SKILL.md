@@ -171,7 +171,14 @@ Steps:
 3. **Create** source summary in `wiki/sources/`. Use the source frontmatter schema from `references/frontmatter.md`. Assign an address per the **Address Assignment** section below.
 4. **Create or update** entity pages for every person, org, product, and repo mentioned. One page per entity. Assign addresses to new entity pages.
 5. **Create or update** concept pages for significant ideas and frameworks. Assign addresses to new concept pages.
-6. **Update** relevant domain page(s) and their `_index.md` sub-indexes.
+6. **Update** relevant domain page(s) and their `_index.md` sub-indexes:
+   a. If a domain page has empty placeholder sections (e.g., `_No pages yet_`, `_No topics yet_`), replace them with the new concepts/entities created in this ingest
+   b. Add wikilinks to newly created pages under the appropriate headings in the domain page
+   c. Add reverse links: entity and concept pages should link back to their domain page in the `related:` frontmatter field (e.g., a concept about AI should have `related: [[AI-Research]]`)
+6.5. **Cross-reference pass**: After creating all pages, scan for missing connections:
+   - Do entity pages mention projects, topics, or domains that have wiki pages? → Add `[[Domain-Name]]` links in `related:`
+   - Do concept pages clearly belong to a domain? → Add domain link in `related:`
+   - Example: if [[Andrej-Karpathy]] mentions "nanoGPT" and there is an [[Open-Source]] domain page, add `[[Open-Source]]` to the entity's `related:` field
 7. **Update** `wiki/overview.md` if the big picture changed.
 8. **Update** `wiki/index.md`. Add entries for all new pages.
 9. **Update** `wiki/hot.md` with this ingest's context.

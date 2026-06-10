@@ -30,11 +30,18 @@ Full decision tree: [`wiki/references/transport-fallback.md`](../../wiki/referen
 Work through these in order:
 
 1. **Orphan pages**. Wiki pages with no inbound wikilinks. They exist but nothing points to them.
-2. **Dead links**. Wikilinks that reference a page that does not exist.
+2. **Dead links**. Wikilinks that reference a page that does not exist. **Exceptions** (NOT dead links):
+   - `[[.raw/...]]` — references to source files in the frontmatter `sources:` field. These are intentional references to immutable source documents, not wiki pages.
+   - `[[.raw/articles/...]]`, `[[.raw/transcripts/...]]`, etc. — same as above.
+   - Only flag as dead if the wikilink is in the **body** of a page (not frontmatter) AND the target file does not exist anywhere in the vault.
 3. **Stale claims**. Assertions on older pages that newer sources have contradicted or updated.
 4. **Missing pages**. Concepts or entities mentioned in multiple pages but lacking their own page.
 5. **Missing cross-references**. Entities mentioned in a page but not linked.
-6. **Frontmatter gaps**. Pages missing required fields (type, status, created, updated, tags).
+6. **Frontmatter gaps**. Pages missing required fields. Requirements vary by page type:
+   - **Knowledge pages** (entity, concept, source, comparison, question): MUST have `type`, `title`, `created`, `updated`, `tags`, `status`, `related`, `sources`
+   - **Domain pages** (AI-Research, Open-Source, etc.): MUST have `type`, `title`, `updated`. RECOMMENDED: `created`, `tags` (for Dataview queries)
+   - **Meta pages** (index, log, hot, overview, dashboard): MUST have `type`, `title`. OPTIONAL: `created`, `updated`, `tags`. SHOULD NOT have `status` (meta pages don't have lifecycle status)
+   - Only flag gaps when the page type requires the missing field. Do not flag meta pages for missing `status`, `created`, or `tags`.
 7. **Empty sections**. Headings with no content underneath.
 8. **Stale index entries**. Items in `wiki/index.md` pointing to renamed or deleted pages.
 9. **Address validity** (DragonScale Mechanism 2). For every page that has an `address:` frontmatter field, validate the format. See the **Address Validation** section below.
@@ -91,10 +98,10 @@ Enforce these during lint:
 
 | Element | Convention | Example |
 |---------|-----------|---------|
-| Filenames | Title Case with spaces | `Machine Learning.md` |
+| Filenames | Title Case with hyphens | `Machine-Learning.md` |
 | Folders | lowercase with dashes | `wiki/data-models/` |
 | Tags | lowercase, hierarchical | `#domain/architecture` |
-| Wikilinks | match filename exactly | `[[Machine Learning]]` |
+| Wikilinks | match filename exactly (hyphens, not spaces) | `[[Machine-Learning]]` |
 
 Filenames must be unique across the vault. Wikilinks work without paths only if filenames are unique.
 
