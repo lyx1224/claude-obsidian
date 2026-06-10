@@ -178,6 +178,21 @@ After research is complete, create these pages:
 
 ---
 
+## Source Filing Decision
+
+Every `[[wikilink]]` in the synthesis page must resolve to an existing wiki page. Broken wikilinks cause Obsidian to create empty files when clicked. Apply this rule:
+
+| Source depth | Action | Synthesis reference |
+|---|---|---|
+| **Substantive** (long-form article, paper, primary source, worth re-reading) | Create a `wiki/sources/<slug>.md` page with full frontmatter | `[[wiki/sources/Source Name]]` (wikilink) |
+| **Light** (supporting quote, tweet, brief mention, not worth a standalone page) | Do NOT create a page. Use external markdown link in the Sources section only | `[Title](URL)` (external link, NOT wikilink) |
+
+**Critical:** The `sources:` field in the synthesis frontmatter must match the body. Wikilinks in frontmatter must point to existing pages; external URLs should be plain strings. Never use `[[wikilink]]` for a source that has no corresponding wiki page.
+
+When in doubt, default to the light path (external link). Creating an unnecessary source page is less harmful than a broken wikilink, but both should be avoided.
+
+---
+
 ## Synthesis Page Structure
 
 ```markdown
@@ -193,8 +208,8 @@ status: developing
 related:
   - "[[Every page created in this session]]"
 sources:
-  - "[[wiki/sources/Source 1]]"
-  - "[[wiki/sources/Source 2]]"
+  - "[[wiki/sources/Source 1]]"      # substantive source with a wiki page (wikilink)
+  - "https://example.com/article"     # light reference, no wiki page (external URL)
 ---
 
 # Research: [Topic]
